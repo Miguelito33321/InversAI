@@ -1,0 +1,42 @@
+# Render.com deployment configuration
+services:
+  # Backend API Service
+  - type: web
+    name: inversai-backend
+    env: node
+    region: oregon # Change to your preferred region
+    plan: free # Change to your preferred plan
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: inversai-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+    autoDeploy: true
+
+  # Frontend Static Site
+  - type: web
+    name: inversai-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/web-build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://inversai-backend.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+# Database
+databases:
+  - name: inversai-db
+    plan: free # Change to your preferred plan
+    type: mongodb

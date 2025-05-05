@@ -2,13 +2,15 @@
   "name": "inversai-frontend",
   "version": "1.0.0",
   "description": "Mobile frontend for InversAI - Intelligent Financial Advisory Application",
-  "main": "index.js",
+  "main": "./App.js",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --no-dev --minify",
+    "start:dev": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest"
+    "build": "expo export:web",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.5.11",
